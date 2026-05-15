@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Cat Chase Game</title>
+
   <style>
     body {
       margin: 0;
@@ -48,7 +49,185 @@
 
   <p><a href="index.html">Back to Home</a></p>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <script src="sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.js"></script>
+
+  <script>
+    let mouseTargetX;
+    let mouseTargetY;
+
+    let score = 0;
+    let gameOver = false;
+
+    let mouseSpeed = 2.8;
+    let catchDistance = 45;
+
+    function setup() {
+      let canvas = createCanvas(600, 600);
+      canvas.parent("game-container");
+
+      mouseTargetX = random(100, 500);
+      mouseTargetY = random(120, 500);
+
+      noCursor();
+    }
+
+    function draw() {
+      background(245, 225, 200);
+
+      drawRoom();
+
+      if (gameOver === false) {
+        moveMouseAway();
+        checkCatch();
+        drawMouseCharacter();
+        drawCatCursor();
+        drawScore();
+      } else {
+        drawWinScreen();
+      }
+    }
+
+    function drawRoom() {
+      noStroke();
+
+      // wall
+      fill(245, 225, 200);
+      rect(0, 0, 600, 360);
+
+      // floor
+      fill(220, 190, 150);
+      rect(0, 360, 600, 240);
+
+      // baseboard
+      fill(120, 85, 55);
+      rect(0, 350, 600, 20);
+
+      // rug
+      fill(180, 70, 60, 120);
+      ellipse(300, 500, 360, 120);
+    }
+
+    function moveMouseAway() {
+      let distance = dist(mouseX, mouseY, mouseTargetX, mouseTargetY);
+
+      if (distance < 170) {
+        let dx = mouseTargetX - mouseX;
+        let dy = mouseTargetY - mouseY;
+        let length = sqrt(dx * dx + dy * dy);
+
+        if (length > 0) {
+          mouseTargetX += (dx / length) * mouseSpeed;
+          mouseTargetY += (dy / length) * mouseSpeed;
+        }
+      }
+
+      mouseTargetX = constrain(mouseTargetX, 30, width - 30);
+      mouseTargetY = constrain(mouseTargetY, 80, height - 30);
+    }
+
+    function checkCatch() {
+      let distance = dist(mouseX, mouseY, mouseTargetX, mouseTargetY);
+
+      if (distance < catchDistance) {
+        score++;
+
+        mouseTargetX = random(100, 500);
+        mouseTargetY = random(120, 500);
+
+        if (score >= 10) {
+          gameOver = true;
+        }
+      }
+    }
+
+    function drawMouseCharacter() {
+      noStroke();
+
+      // mouse body
+      fill(150);
+      ellipse(mouseTargetX, mouseTargetY, 45, 28);
+
+      // mouse head
+      fill(165);
+      ellipse(mouseTargetX + 22, mouseTargetY - 5, 25, 22);
+
+      // mouse ears
+      fill(130);
+      ellipse(mouseTargetX + 15, mouseTargetY - 20, 12, 12);
+      ellipse(mouseTargetX + 28, mouseTargetY - 19, 12, 12);
+
+      // mouse eye
+      fill(0);
+      ellipse(mouseTargetX + 30, mouseTargetY - 8, 4, 4);
+
+      // mouse tail
+      noFill();
+      stroke(120);
+      strokeWeight(3);
+      arc(mouseTargetX - 28, mouseTargetY + 2, 35, 30, PI, TWO_PI);
+    }
+
+    function drawCatCursor() {
+      let catX = mouseX;
+      let catY = mouseY;
+
+      noStroke();
+
+      // cat head
+      fill(60, 60, 60);
+      ellipse(catX, catY, 60, 55);
+
+      // cat ears
+      triangle(catX - 25, catY - 20, catX - 10, catY - 50, catX + 2, catY - 20);
+      triangle(catX + 25, catY - 20, catX + 10, catY - 50, catX - 2, catY - 20);
+
+      // cat eyes
+      fill(255, 230, 80);
+      ellipse(catX - 12, catY - 5, 12, 16);
+      ellipse(catX + 12, catY - 5, 12, 16);
+
+      fill(0);
+      ellipse(catX - 12, catY - 5, 5, 10);
+      ellipse(catX + 12, catY - 5, 5, 10);
+
+      // cat nose
+      fill(255, 120, 140);
+      triangle(catX - 5, catY + 8, catX + 5, catY + 8, catX, catY + 15);
+
+      // whiskers
+      stroke(0);
+      strokeWeight(2);
+      line(catX - 10, catY + 12, catX - 35, catY + 5);
+      line(catX - 10, catY + 17, catX - 35, catY + 20);
+      line(catX + 10, catY + 12, catX + 35, catY + 5);
+      line(catX + 10, catY + 17, catX + 35, catY + 20);
+    }
+
+    function drawScore() {
+      fill(40);
+      noStroke();
+      textAlign(LEFT);
+      textSize(24);
+      text("Mice caught: " + score + " / 10", 25, 40);
+
+      textSize(16);
+      text("Move your cursor to chase the mouse.", 25, 65);
+    }
+
+    function drawWinScreen() {
+      background(245, 225, 200);
+
+      fill(40);
+      textAlign(CENTER);
+      textSize(50);
+      text("You Win!", width / 2, 250);
+
+      textSize(26);
+      text("You caught 10 mice.", width / 2, 305);
+
+      textSize(18);
+      text("Refresh the page to play again.", width / 2, 345);
+    }
+  </script>
 </body>
 </html>
