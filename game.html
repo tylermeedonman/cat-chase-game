@@ -49,7 +49,7 @@
 
   <p><a href="index.html">Back to Home</a></p>
 
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 
   <script>
     let mouseTargetX;
@@ -90,19 +90,15 @@
     function drawRoom() {
       noStroke();
 
-      // wall
       fill(245, 225, 200);
       rect(0, 0, 600, 360);
 
-      // floor
       fill(220, 190, 150);
       rect(0, 360, 600, 240);
 
-      // baseboard
       fill(120, 85, 55);
       rect(0, 350, 600, 20);
 
-      // rug
       fill(180, 70, 60, 120);
       ellipse(300, 500, 360, 120);
     }
@@ -129,7 +125,7 @@
       let distance = dist(mouseX, mouseY, mouseTargetX, mouseTargetY);
 
       if (distance < catchDistance) {
-        score++;
+        score = score + 1;
 
         mouseTargetX = random(100, 500);
         mouseTargetY = random(120, 500);
@@ -143,24 +139,19 @@
     function drawMouseCharacter() {
       noStroke();
 
-      // mouse body
       fill(150);
       ellipse(mouseTargetX, mouseTargetY, 45, 28);
 
-      // mouse head
       fill(165);
       ellipse(mouseTargetX + 22, mouseTargetY - 5, 25, 22);
 
-      // mouse ears
       fill(130);
       ellipse(mouseTargetX + 15, mouseTargetY - 20, 12, 12);
       ellipse(mouseTargetX + 28, mouseTargetY - 19, 12, 12);
 
-      // mouse eye
       fill(0);
       ellipse(mouseTargetX + 30, mouseTargetY - 8, 4, 4);
 
-      // mouse tail
       noFill();
       stroke(120);
       strokeWeight(3);
@@ -173,15 +164,12 @@
 
       noStroke();
 
-      // cat head
       fill(60, 60, 60);
       ellipse(catX, catY, 60, 55);
 
-      // cat ears
       triangle(catX - 25, catY - 20, catX - 10, catY - 50, catX + 2, catY - 20);
       triangle(catX + 25, catY - 20, catX + 10, catY - 50, catX - 2, catY - 20);
 
-      // cat eyes
       fill(255, 230, 80);
       ellipse(catX - 12, catY - 5, 12, 16);
       ellipse(catX + 12, catY - 5, 12, 16);
@@ -190,11 +178,9 @@
       ellipse(catX - 12, catY - 5, 5, 10);
       ellipse(catX + 12, catY - 5, 5, 10);
 
-      // cat nose
       fill(255, 120, 140);
       triangle(catX - 5, catY + 8, catX + 5, catY + 8, catX, catY + 15);
 
-      // whiskers
       stroke(0);
       strokeWeight(2);
       line(catX - 10, catY + 12, catX - 35, catY + 5);
